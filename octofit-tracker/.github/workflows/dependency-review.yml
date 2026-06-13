@@ -1,0 +1,45 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    paths:
+      - 'octofit-tracker/frontend/package.json'
+      - 'octofit-tracker/backend/package.json'
+
+jobs:
+  validate-dependencies:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Validate React 19 in Frontend
+        run: |
+          if grep -q '"react": "\^19' octofit-tracker/frontend/package.json; then
+            echo "✅ React 19 dependency is correctly specified"
+            exit 0
+          else
+            echo "❌ React 19 not found or incorrectly specified"
+            exit 1
+          fi
+      
+      - name: Validate Express in Backend
+        run: |
+          if grep -q '"express"' octofit-tracker/backend/package.json; then
+            echo "✅ Express dependency is correctly specified"
+            exit 0
+          else
+            echo "❌ Express not found in backend package.json"
+            exit 1
+          fi
+      
+      - name: Validate Mongoose in Backend
+        run: |
+          if grep -q '"mongoose"' octofit-tracker/backend/package.json; then
+            echo "✅ Mongoose dependency is correctly specified"
+            exit 0
+          else
+            echo "❌ Mongoose not found in backend package.json"
+            exit 1
+          fi
